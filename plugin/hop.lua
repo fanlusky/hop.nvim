@@ -12,6 +12,7 @@ local commands = {
   HopChar1 = hop.hint_char1,
   HopChar2 = hop.hint_char2,
   HopWord = hop.hint_words,
+  HopWordJieba = hop.hint_words_jieba,
   HopPattern = hop.hint_patterns,
   HopAnywhere = hop.hint_anywhere,
   HopCamelCase = hop.hint_camel_case,

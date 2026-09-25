@@ -332,6 +332,13 @@ Most of the functions and values you need to know about are in `hop`.
     Arguments:~
         {opts}  Hop options.
 
+`hop.hint_words_jieba(`{opts}`)`                              *hop.hint_words_jieba*
+    Like |hop.hint_words|, but obtains word boundaries from the optional
+    `jieba.nvim` backend (`cppjieba.jieba`). This is useful for Chinese text,
+    where Vim's keyword boundaries treat a whole run of Han characters as one
+    word. The command form is |:HopWordJieba|. If `jieba.nvim` is not installed,
+    an error is shown and no jump is started.
+
 `hop.hint_patterns(`{opts}`,` {pattern}`)`                         *hop.hint_patterns*
     Annotate all matched patterns in the current window with key sequences.
 

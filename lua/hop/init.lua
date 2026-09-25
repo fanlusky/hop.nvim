@@ -391,6 +391,20 @@ function M.hint_words(opts)
   M.hint_with_regex(jump_regex.regex_by_word_start(), opts)
 end
 
+-- Hint word starts using the optional jieba.nvim backend.  The dependency is
+-- loaded lazily so installing Hop alone keeps the existing HopWord behavior.
+---@param opts Options
+function M.hint_words_jieba(opts)
+  local jump_regex = require('hop.jieba')
+  opts = override_opts(opts)
+  local regex, err = jump_regex.regex_from_jieba(opts)
+  if not regex then
+    vim.notify('HopWordJieba: ' .. err, vim.log.levels.ERROR)
+    return
+  end
+  M.hint_with_regex(regex, opts)
+end
+
 ---@param opts Options
 function M.hint_camel_case(opts)
   local jump_regex = require('hop.jump_regex')

@@ -30,6 +30,8 @@ This is a fork of the [original hop.nvim repo](https://github.com/phaazon/hop.nv
 # Features
 
 - Go to any word in the current buffer (`:HopWord`).
+- Go to Jieba-segmented words in the current buffer (`:HopWordJieba`, with
+  [`jieba.nvim`](https://github.com/neo451/jieba.nvim) installed).
 - Go to any camelCase word in the current buffer (`:HopCamelCase`).
 - Go to any character in the current buffer (`:HopChar1`).
 - Go to any bigrams in the current buffer (`:HopChar2`).
