@@ -55,18 +55,21 @@ end
 ---@param opts Options
 ---@return Regex|nil, string|nil
 function M.regex_from_jieba(opts)
-  local ok, Jieba = pcall(function()
-    return require('cppjieba.jieba').Jieba
-  end)
+  local ok, native = pcall(require, 'cppjieba')
   if not ok then
-    return nil, 'jieba.nvim is not installed (missing cppjieba.jieba)'
+    return nil, 'cppjieba is not installed; install it with :Rocks install cppjieba'
   end
 
-  local ok_instance, jieba = pcall(Jieba)
-  if not ok_instance or not jieba then
-    return nil, 'jieba.nvim could not initialize its native backend'
+  local paths = opts and opts.jieba_paths
+  if not paths then
+    return nil, 'cppjieba paths are not configured; set opts.jieba_paths'
   end
-  return M.regex(jieba)
+
+  local ok_instance, native_instance = pcall(native.Jieba, paths.dict, paths.model, paths.user_dict, paths.idf, paths.stop_word)
+  if not ok_instance or not native_instance then
+    return nil, 'cppjieba could not initialize its native backend'
+  end
+  return M.regex({ cut = function(_, line) return native_instance:cut(line) end })
 end
 
 return M

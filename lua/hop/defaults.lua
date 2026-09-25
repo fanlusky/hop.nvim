@@ -30,6 +30,8 @@ M.hint_offset = 0 ---@type WindowCell
 M.hint_type = hint.HintType.OVERLAY ---@type HintType
 M.excluded_filetypes = {}
 M.match_mappings = {}
+-- Paths passed to cppjieba.Jieba. Required by hint_words_jieba().
+M.jieba_paths = nil
 M.extensions = { 'hop-yank', 'hop-treesitter' }
 
 return M

@@ -1,6 +1,19 @@
 local eq = assert.are.same
 
 describe('Jieba word regex', function()
+  it('uses the native cppjieba module directly', function()
+    package.loaded.cppjieba = nil
+    package.preload.cppjieba = function()
+      return { Jieba = function(_, _, _, _, _) return { cut = function() return { '中文' } end } end }
+    end
+    local regex = require('hop.jieba').regex_from_jieba({
+      jieba_paths = { dict = 'dict', model = 'model', user_dict = 'user', idf = 'idf', stop_word = 'stop' },
+    })
+    assert.is_not_nil(regex)
+    package.preload.cppjieba = nil
+    package.loaded.cppjieba = nil
+  end)
+
   it('uses token starts and skips punctuation', function()
     local jieba = {
       cut = function(_, line)

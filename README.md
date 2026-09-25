@@ -32,6 +32,11 @@ This is a fork of the [original hop.nvim repo](https://github.com/phaazon/hop.nv
 - Go to any word in the current buffer (`:HopWord`).
 - Go to Jieba-segmented words in the current buffer (`:HopWordJieba`, with
   [`jieba.nvim`](https://github.com/neo451/jieba.nvim) installed).
+
+`HopWordJieba` uses the `cppjieba` Lua module directly. Configure its dictionary
+paths in `hop.setup({ jieba_paths = { dict = ..., model = ..., user_dict = ...,
+idf = ..., stop_word = ... } })`; the `jieba.nvim` plugin entry itself is not
+required.
 - Go to any camelCase word in the current buffer (`:HopCamelCase`).
 - Go to any character in the current buffer (`:HopChar1`).
 - Go to any bigrams in the current buffer (`:HopChar2`).
