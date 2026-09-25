@@ -46,6 +46,15 @@ for label, hint in pairs(commands) do
   end, opts)
 end
 
+user_command('HopJiebaInstall', function()
+  local ok, err = require('hop.jieba_install').install({ force = true })
+  if ok then
+    vim.notify('HopJiebaInstall: cppjieba installed', vim.log.levels.INFO)
+  else
+    vim.notify('HopJiebaInstall: ' .. err, vim.log.levels.ERROR)
+  end
+end, opts)
+
 local lineCommands = {
   HopLine = hop.hint_lines,
   HopVertical = hop.hint_vertical,

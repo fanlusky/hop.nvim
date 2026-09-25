@@ -1,0 +1,40 @@
+diff --git a/cppjieba.nobj.lua b/cppjieba.nobj.lua
+index cec63cd..03f889b 100644
+--- a/cppjieba.nobj.lua
++++ b/cppjieba.nobj.lua
+@@ -5,7 +5,7 @@ c_module "cppjieba" {
+     include "jieba.h",
+     object "Jieba" {
+         constructor {
+-            c_call "Jieba *>1" "NewJieba" { "const char *", "dict_path",
++            c_call "Jieba *" "NewJieba" { "const char *", "dict_path",
+                 "const char *", "model_path", "const char *", "user_dict_path",
+                 "const char *", "idf_path", "const char *", "stop_word_path" },
+         },
+@@ -22,10 +22,7 @@ c_module "cppjieba" {
+   lua_newtable(L);
+   int i = 1;
+   for (x = words; x && x->word; x++) {
+-      char *p = (char *)malloc(x->len + 1);
+-      strncpy(p, x->word, x->len);
+-      p[x->len] = '\0';
+-      lua_pushstring(L, p);
++      lua_pushlstring(L, x->word, x->len);
+       lua_rawseti(L, -2, i++);
+   }
+   FreeWords(words);
+diff --git a/xmake.lua b/xmake.lua
+index 0eeeefc..07da60b 100644
+--- a/xmake.lua
++++ b/xmake.lua
+@@ -4,7 +4,9 @@ includes("packages/c/cjieba")
+ add_rules("mode.debug", "mode.release")
+ 
+ local version = "5.6.3"
+-add_requires("cjieba", { version = version })
++-- link the MSVC runtime statically so the DLL has no VC++ redist dependency
++set_runtimes("MT")
++add_requires("cjieba", { version = version, configs = { runtimes = "MT" } })
+ 
+ target("cppjieba")
+ do

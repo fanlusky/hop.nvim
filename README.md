@@ -30,13 +30,8 @@ This is a fork of the [original hop.nvim repo](https://github.com/phaazon/hop.nv
 # Features
 
 - Go to any word in the current buffer (`:HopWord`).
-- Go to Jieba-segmented words in the current buffer (`:HopWordJieba`, with
-  [`jieba.nvim`](https://github.com/neo451/jieba.nvim) installed).
-
-`HopWordJieba` uses the `cppjieba` Lua module directly. Configure its dictionary
-paths in `hop.setup({ jieba_paths = { dict = ..., model = ..., user_dict = ...,
-idf = ..., stop_word = ... } })`; the `jieba.nvim` plugin entry itself is not
-required.
+- Go to Jieba-segmented (Chinese) words in the current buffer (`:HopWordJieba`,
+  see [Jieba word jumping](#jieba-word-jumping)).
 - Go to any camelCase word in the current buffer (`:HopCamelCase`).
 - Go to any character in the current buffer (`:HopChar1`).
 - Go to any bigrams in the current buffer (`:HopChar2`).
@@ -79,6 +74,40 @@ use {
   end
 }
 ```
+
+## Jieba word jumping
+
+`:HopWordJieba` / `require('hop').hint_words_jieba()` segments Chinese text with
+[cppjieba](https://github.com/yanyiwu/cppjieba), so every Chinese word gets its
+own hint instead of a whole run of Han characters. The jieba support lives on
+this fork's `master` branch, so do not pin it to a version tag:
+
+```lua
+{
+    'fanlusky/hop.nvim',
+    branch = 'master',
+    opts = {},
+    keys = {
+        { 's', function() require('hop').hint_words_jieba() end, mode = { 'n', 'v' } },
+    },
+}
+```
+
+- **64-bit Windows**: nothing else to install. lazy.nvim runs `build.lua`, which
+  downloads a prebuilt `cppjieba` module and its dictionaries (~5 MB) from this
+  repository's releases into `stdpath('data')/hop.nvim/`. With other plugin
+  managers, run `:HopJiebaInstall` once (it also runs on first use). How the
+  module is built is described in [scripts/cppjieba](scripts/cppjieba/README.md).
+  If your user profile path contains non-ASCII characters, enable Windows'
+  "Use Unicode UTF-8 for worldwide language support" option, otherwise the DLL
+  and dictionaries cannot be opened.
+- **Other platforms**: `luarocks install cppjieba` (or `:Rocks install cppjieba`).
+  The dictionaries are found on the runtimepath; set `jieba_paths = { dict = ...,
+  model = ..., user_dict = ..., idf = ..., stop_word = ... }` to use others.
+
+Loading the dictionaries takes about 0.7 s the first time a jieba hint is shown;
+later jumps reuse them. Call `require('hop.jieba').preload()` (for example on
+`CursorHold`) to pay that cost ahead of time.
 
 ## Supported Neovim versions
 

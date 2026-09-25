@@ -1,0 +1,14 @@
+diff --git a/native_objects/gen_lua.lua b/native_objects/gen_lua.lua
+index 22c99b5..f0f9d01 100644
+--- a/native_objects/gen_lua.lua
++++ b/native_objects/gen_lua.lua
+@@ -59,7 +59,9 @@ typedef unsigned __int32 uint32_t;
+ typedef __int64 int64_t;
+ typedef unsigned __int64 uint64_t;
+ #endif
++#ifndef __bool_true_false_are_defined
+ typedef int bool;
++#endif
+ #ifndef true
+ #define true 1
+ #endif
