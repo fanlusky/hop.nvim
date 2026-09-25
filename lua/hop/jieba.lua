@@ -45,6 +45,21 @@ local function make_regex(jieba)
   }
 end
 
+local function default_paths()
+  local dict = vim.api.nvim_get_runtime_file('lua/cppjieba/dict/jieba.dict.utf8', true)[1]
+  if not dict then
+    return nil
+  end
+  local dir = vim.fn.fnamemodify(dict, ':h')
+  return {
+    dict = dict,
+    model = dir .. '/hmm_model.utf8',
+    user_dict = vim.fn.has('win32') == 1 and 'nul' or '/dev/null',
+    idf = dir .. '/idf.utf8',
+    stop_word = dir .. '/stop_words.utf8',
+  }
+end
+
 ---@param jieba table A jieba.nvim Jieba instance, or a compatible object.
 ---@return Regex
 function M.regex(jieba)
@@ -60,7 +75,7 @@ function M.regex_from_jieba(opts)
     return nil, 'cppjieba is not installed; install it with :Rocks install cppjieba'
   end
 
-  local paths = opts and opts.jieba_paths
+  local paths = (opts and opts.jieba_paths) or default_paths()
   if not paths then
     return nil, 'cppjieba paths are not configured; set opts.jieba_paths'
   end
